@@ -1,0 +1,111 @@
+## 🧪 **Day 1: Jenkins Setup, UI, and Freestyle Jobs**
+
+### 🎯 **Objective**:
+
+Understand Jenkins architecture, install it, explore the UI, and create your first Freestyle job.
+
+---
+
+### 🧰 **1. Jenkins Architecture (Theory)**
+
+* **Master**: Manages jobs, schedules builds, delegates to agents.
+* **Agent (Slave)**: Executes builds, returns results to the master.
+* **Plugins**: Add features to Jenkins (e.g., Docker, Git, Slack).
+* **Jenkins Home**: `/var/lib/jenkins` (contains config, plugins, builds).
+
+---
+
+### 🖥️ **2. Jenkins Installation (Amazon Linux/Ubuntu)**
+
+ ✅ Ubuntu:
+
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+
+ ✅ Amazon Linux 2:
+sudo yum update -y
+sudo amazon-linux-extras enable java-openjdk11
+sudo yum install java-11-openjdk-devel -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+
+### 🔐 **3. Access Jenkins**
+
+* URL: `http://<your-ip>:8080`
+* Unlock Jenkins using the password:
+
+  ```bash
+  sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+  ```
+* Install **Suggested Plugins**
+* Create Admin User
+
+---
+
+### 🧭 **4. Explore Jenkins UI**
+
+* Dashboard
+* New Item
+* Manage Jenkins → Global Tool Configuration
+* Jenkins System Log
+* Build History
+
+---
+
+### 🛠️ **5. Create Freestyle Job**
+
+#### Steps:
+
+1. Click **"New Item" → Freestyle Project**
+2. Enter job name (e.g., `Hello-Jenkins`)
+3. Source Code Management → None
+4. Build Step → Execute Shell:
+
+   ```bash
+   echo "Welcome to Jenkins"
+   date
+   hostname
+   ```
+5. Save and **Build Now**
+6. View Console Output
+
+---
+
+### 📁 **6. Jenkins Home Directory Structure**
+
+```bash
+cd /var/lib/jenkins
+ls -l
+```
+
+* `jobs/` → Contains job configs
+* `plugins/` → Installed plugins
+* `workspace/` → Job workspace
+* `secrets/` → Credentials and security files
+* `config.xml` → Jenkins main config
+
+---
+
+### 🧪 **7. Hands-on Task**
+
+✅ Install Jenkins on your preferred OS (Ubuntu/Amazon Linux)
+✅ Create and run a Freestyle job
+✅ View console output and workspace
+✅ Explore `/var/lib/jenkins` and identify job/config/plugin folders
+
+
