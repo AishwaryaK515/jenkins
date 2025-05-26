@@ -1,0 +1,147 @@
+## 🧪 **Day 2: Git, GitHub Integration, Webhooks & Credentials**
+
+### 🎯 **Objective**:
+
+Integrate Jenkins with GitHub to automate builds triggered by commits using webhooks, and securely manage credentials.
+
+---
+
+## 🔗 **1. Install Git Plugin in Jenkins**
+
+**Navigate to**: `Manage Jenkins → Plugins → Available`
+
+* Search and install:
+
+  * **Git plugin**
+  * **GitHub plugin**
+  * (Optional) **GitHub Integration Plugin**
+
+📌 After installation, restart Jenkins if prompted.
+
+---
+
+## 🔐 **2. Configure Git in Jenkins**
+
+### ✅ Global Git Setup:
+
+Go to: `Manage Jenkins → Global Tool Configuration`
+
+* Under **Git**, click **Add Git**:
+
+  * Name: `Default`
+  * Path to Git executable (usually auto-detected): `/usr/bin/git`
+
+Verify Git is installed:
+
+```bash
+git --version
+```
+
+If not installed:
+
+```bash
+# Ubuntu
+sudo apt install git -y
+
+# Amazon Linux
+sudo yum install git -y
+```
+
+---
+
+## 🔑 **3. Add Jenkins Credentials for GitHub**
+
+### Step-by-Step:
+
+1. Go to: `Manage Jenkins → Credentials → (global) → Add Credentials`
+2. Choose:
+
+   * **Username with password** (for HTTPS)
+     OR
+   * **SSH Username with private key** (for SSH)
+
+### Example (Personal Access Token - recommended for HTTPS):
+
+* **Kind**: `Username with password`
+* **Username**: `your_github_username`
+* **Password**: `your_personal_access_token`
+* **ID**: `github-https`
+* Save.
+
+🛡️ You can generate a GitHub token from:
+👉 [https://github.com/settings/tokens](https://github.com/settings/tokens) (with `repo` scope)
+
+---
+
+## 🔧 **4. Create a GitHub-Integrated Jenkins Job**
+
+### 🛠️ Steps:
+
+1. Create a new **Freestyle Project** → Name: `github-demo`
+2. Under **Source Code Management** → Choose `Git`
+
+   * Repository URL: `https://github.com/yourusername/yourrepo.git`
+   * Credentials: Choose the one you added (`github-https`)
+3. Under **Build Triggers**, check:
+
+   * ✅ **GitHub hook trigger for GITScm polling**
+4. Under **Build Steps**:
+
+   * Add `Execute Shell` step:
+
+     ```bash
+     echo "Code Pulled Successfully!"
+     ls -l
+     ```
+5. Save & Build Now to test
+
+---
+
+## 🚀 **5. Set Up GitHub Webhook**
+
+### On your GitHub repository:
+
+1. Go to **Settings → Webhooks → Add Webhook**
+2. Payload URL:
+
+   ```
+   http://<your-server-ip>:8080/github-webhook/
+   ```
+3. Content Type: `application/json`
+4. Secret: (Optional, match in Jenkins global config)
+5. Which events: ✅ Just the push event
+6. Click **Add Webhook**
+
+---
+
+## 🧪 **6. Test the Webhook Integration**
+
+* Make a change or push a new commit to your GitHub repo.
+* Jenkins job should be automatically triggered via webhook.
+* Check Jenkins **Console Output** and **Git Pull Logs**.
+
+---
+
+## 📁 **7. Jenkins Workspace Overview**
+
+```bash
+cd /var/lib/jenkins/workspace/github-demo/
+ls -l
+```
+
+Inspect pulled files, shell output, etc.
+
+---
+
+## ✅ **Day 2 Summary Checklist**
+
+| Task                                    | Status |
+| --------------------------------------- | ------ |
+| Installed Git & GitHub Plugins          | ✅      |
+| Configured Git and GitHub credentials   | ✅      |
+| Created Jenkins job pulling from GitHub | ✅      |
+| Set up webhook in GitHub                | ✅      |
+| Triggered job automatically by commit   | ✅      |
+
+---
+
