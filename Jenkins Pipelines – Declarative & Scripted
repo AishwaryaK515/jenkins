@@ -1,0 +1,166 @@
+## 🧪 **Day 3: Jenkins Pipelines – Declarative & Scripted**
+
+### 🎯 **Objective**:
+
+Understand and build both **Declarative** and **Scripted** pipelines using `Jenkinsfile`, source control integration, and best practices.
+
+---
+
+## 📌 1. **What is a Jenkins Pipeline?**
+
+A pipeline automates **build → test → deploy** stages with code stored in a `Jenkinsfile`.
+
+There are two types:
+
+* ✅ **Declarative Pipeline** (recommended): Simplified, structured syntax
+* ⚙️ **Scripted Pipeline**: Full Groovy-based flexibility
+
+---
+
+## 🔁 2. **Jenkins Pipeline Plugin Setup**
+
+### Verify Installed:
+
+Go to `Manage Jenkins → Plugin Manager → Installed`
+
+* Confirm **Pipeline**, **Pipeline: Groovy**, **Git**, and **GitHub** plugins are installed.
+
+---
+
+## 📂 3. **Create a Sample GitHub Repo with Jenkinsfile**
+
+You can use your existing repo or create a new one.
+
+**Example: Create a new repo called `jenkins-pipeline-demo`**
+
+**Add a Jenkinsfile**:
+
+### 🧾 `Jenkinsfile` – Declarative Example:
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        GREETING = 'Hello from Jenkins Declarative Pipeline!'
+    }
+
+    stages {
+        stage('Pull Code') {
+            steps {
+                echo "Cloning Git repo"
+                sh 'git --version'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh 'echo Build successful'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'echo Tests passed'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                sh 'echo Deployed successfully'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed!'
+        }
+    }
+}
+```
+
+Push the `Jenkinsfile` to your GitHub repo.
+
+---
+
+## 🛠️ 4. **Create a Pipeline Job in Jenkins**
+
+1. **New Item → Pipeline**
+
+2. Name: `declarative-pipeline-demo`
+
+3. In **Pipeline Definition**, choose:
+
+   * **Pipeline script from SCM**
+   * SCM: `Git`
+   * Repo URL: `https://github.com/your-username/jenkins-pipeline-demo.git`
+   * Credentials: Add if private repo
+   * Branch: `*/main`
+   * Script Path: `Jenkinsfile`
+
+4. Click **Save** → **Build Now**
+
+Check **Console Output** for each stage.
+
+---
+
+## 🔧 5. **Scripted Pipeline Example**
+
+Modify your `Jenkinsfile`:
+
+```groovy
+node {
+    stage('Init') {
+        echo 'Scripted Pipeline Started'
+    }
+    stage('Build') {
+        echo 'Building...'
+        sh 'echo Build complete'
+    }
+    stage('Test') {
+        echo 'Testing...'
+        sh 'echo All tests passed'
+    }
+    stage('Deploy') {
+        echo 'Deploying...'
+        sh 'echo Deployed successfully'
+    }
+}
+```
+
+Commit & push → Jenkins will auto-trigger the pipeline (if webhook is active).
+
+---
+
+## 📌 6. **Common Pipeline Directives**
+
+| Directive     | Purpose                                                |
+| ------------- | ------------------------------------------------------ |
+| `agent any`   | Run on any available agent                             |
+| `environment` | Define env variables                                   |
+| `tools`       | Specify build tools like Maven/Gradle                  |
+| `post`        | Steps to run after pipeline (always, success, failure) |
+| `input`       | Manual approval                                        |
+
+---
+
+## 🧪 7. **Hands-On Tasks**
+
+✅ Create a new GitHub repo with a `Jenkinsfile`
+✅ Build both Declarative & Scripted pipeline
+✅ Use `Pipeline script from SCM`
+✅ Add stages: Pull Code, Build, Test, Deploy
+✅ Explore logs, status, and workspace
+
+---
+
+## ✅ **Day 3 Summary**
+
+| Task                                     | Done |
+| ---------------------------------------- | ---- |
+| Learned Declarative vs Scripted Pipeline | ✅    |
+| Pushed `Jenkinsfile` to GitHub           | ✅    |
+| Created Pipeline Job in Jenkins          | ✅    |
+| Ran and Debugged Pipeline                | ✅    |
+
+---
